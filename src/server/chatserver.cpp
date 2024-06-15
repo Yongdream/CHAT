@@ -1,44 +1,61 @@
-#include"chatservice.hpp"
-#include"public.hpp"
-#include<string>
-#include<muduo/base/Logging.h>
-
+#include "chatserver.hpp"
+#include "json.hpp"
+#include "chatservice.hpp"
+ 
+#include <iostream>
+#include <functional>
+#include <string>
 using namespace std;
-using namespace muduo;
-
-ChatService* ChatService::instance(){
-    static ChatService service;
-
-    return &service;
+using namespace placeholders;//占位符 
+using json = nlohmann::json;
+ 
+//初始化聊天服务器对象
+ChatServer::ChatServer(EventLoop *loop,
+                       const InetAddress &listenAddr,
+                       const string &nameArg)
+    : _server(loop, listenAddr, nameArg), _loop(loop)
+{
+    //注册链接回调
+    _server.setConnectionCallback(std::bind(&ChatServer::onConnection, this, _1));//绑定器bind
+ 
+    //注册消息回调
+    _server.setMessageCallback(std::bind(&ChatServer::onMessage, this, _1, _2, _3));//绑定器bind 
+ 
+    //设置线程数量4
+    _server.setThreadNum(4);
 }
-    
-//注册消息以及对应的回调操作
-ChatService::ChatService(){
-    _msgHanderMap.insert({LOGIN_TYPE,std::bind(&ChatService::login,this,_1,_2,_3)});
-    _msgHanderMap.insert({REG_TYPE,std::bind(&ChatService::reg,this,_1,_2,_3)});
+ 
+//启动服务
+void ChatServer::start()
+{
+    _server.start();
 }
-
-//获取存储消息id和对应的处理方法
-MsgHandler ChatService::getHandle(int msgid){
-
-    //日志记录
-    auto it = _msgHanderMap.find(msgid);
-    if(it == _msgHanderMap.end()){
-        //返回一个lambda表达式，返回一个默认的空处理器，防止业务挂掉，后可做平滑升级处理        
-        return [=](const TcpConnectionPtr &conn,json &js,Timestamp time){
-            LOG_ERROR<<"msgid:"<<msgid<<"can not find handle!";
-        };
+ 
+//上报链接相关信息的回调函数
+void ChatServer::onConnection(const TcpConnectionPtr &conn)
+{
+    //客户端断开链接
+    if (!conn->connected())
+    {
+        conn->shutdown();//关闭文件描述符 
     }
-    else{
-        return _msgHanderMap[msgid];
-    }
 }
-
-void ChatService::login(const TcpConnectionPtr &conn,json &js,Timestamp time){
-    LOG_INFO<<"login";
+ 
+//上报读写事件相关信息的回调函数，收到消息了， 
+void ChatServer::onMessage(const TcpConnectionPtr &conn,
+                           Buffer *buffer,
+                           Timestamp time)
+{
+    string buf = buffer->retrieveAllAsString();//转成字符串接收
+ 
+    //测试，添加json打印代码
+    cout << buf << endl;
+ 
+    //数据的反序列化
+    json js = json::parse(buf);
+    //达到的目的：完全解耦网络模块的代码和业务模块的代码
+    //通过js["msgid"] 获取=》业务handler处理器（在业务模块事先绑定好的）=》conn  js  time传给你 
+    auto msgHandler = ChatService::instance()->getHandler(js["msgid"].get<int>());//转成整型 
+    //回调消息绑定好的事件处理器，来执行相应的业务处理，一个ID一个操作 
+    msgHandler(conn, js, time);
 }
-
-void ChatService::reg(const TcpConnectionPtr &conn,json &js,Timestamp time){
-    LOG_INFO<<"regist";
-}
-

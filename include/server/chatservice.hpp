@@ -4,11 +4,12 @@
 #include <muduo/net/TcpConnection.h>
 #include <unordered_map>//一个消息ID映射一个事件处理 
 #include <functional>
+
 using namespace std;
 using namespace muduo;
 using namespace muduo::net;
  
- 
+#include "usermodel.hpp"
 #include "json.hpp"
 using json = nlohmann::json;
  
@@ -33,6 +34,9 @@ private:
  
     //存储消息id和其对应的业务处理方法，消息处理器的一个表，写消息id对应的处理操作 
     unordered_map<int, MsgHandler> _msgHandlerMap;
+
+    // 数据操作类对象
+    UserModel _userModel;
  
 };
  
