@@ -6,14 +6,10 @@
 
 #IncludeRegexTransform: 
 
-../include/public.hpp
-
 ../include/server/chatserver.hpp
-muduo/net/TcpServer.h
--
 muduo/net/EventLoop.h
 -
-iostream
+muduo/net/TcpServer.h
 -
 
 ../include/server/chatservice.hpp
@@ -23,8 +19,16 @@ unordered_map
 -
 functional
 -
+usermodel.hpp
+../include/server/usermodel.hpp
 json.hpp
 ../include/server/json.hpp
+
+../include/server/db/db.hpp
+mysql/mysql.h
+-
+string
+-
 
 ../include/server/json.hpp
 algorithm
@@ -112,19 +116,53 @@ string_view
 nlohmann/detail/macro_unscope.hpp
 -
 
+../include/server/model/user.hpp
+string
+-
+
+../include/server/model/usermodel.hpp
+user.hpp
+../include/server/model/user.hpp
+
+../include/server/public.hpp
+
 /root/galaxy/CHAT/src/server/chatserver.cpp
+chatserver.hpp
+/root/galaxy/CHAT/src/server/chatserver.hpp
+json.hpp
+/root/galaxy/CHAT/src/server/json.hpp
+chatservice.hpp
+/root/galaxy/CHAT/src/server/chatservice.hpp
+iostream
+-
+functional
+-
+string
+-
+
+/root/galaxy/CHAT/src/server/chatservice.cpp
 chatservice.hpp
 /root/galaxy/CHAT/src/server/chatservice.hpp
 public.hpp
 /root/galaxy/CHAT/src/server/public.hpp
-string
+muduo/base/Logging.h
 -
+
+/root/galaxy/CHAT/src/server/db/db.cpp
+db.hpp
+/root/galaxy/CHAT/src/server/db/db.hpp
 muduo/base/Logging.h
 -
 
 /root/galaxy/CHAT/src/server/main.cpp
-iostream
--
 chatserver.hpp
 /root/galaxy/CHAT/src/server/chatserver.hpp
+
+/root/galaxy/CHAT/src/server/model/usermodel.cpp
+usermodel.hpp
+/root/galaxy/CHAT/src/server/model/usermodel.hpp
+db.hpp
+/root/galaxy/CHAT/src/server/model/db.hpp
+iostream
+-
 

@@ -6,5 +6,5 @@ CXX_FLAGS = -g
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/root/galaxy/CHAT/include -I/root/galaxy/CHAT/include/server -I/root/galaxy/CHAT/thirdparty/json_test 
+CXX_INCLUDES = -I/root/galaxy/CHAT/include -I/root/galaxy/CHAT/include/server -I/root/galaxy/CHAT/include/server/db -I/root/galaxy/CHAT/include/server/model -I/root/galaxy/CHAT/thirdparty/json_test 
 
