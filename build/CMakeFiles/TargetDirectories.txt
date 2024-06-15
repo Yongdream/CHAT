@@ -1,0 +1,7 @@
+/root/galaxy/CHAT/build/CMakeFiles/rebuild_cache.dir
+/root/galaxy/CHAT/build/CMakeFiles/edit_cache.dir
+/root/galaxy/CHAT/build/src/CMakeFiles/rebuild_cache.dir
+/root/galaxy/CHAT/build/src/CMakeFiles/edit_cache.dir
+/root/galaxy/CHAT/build/src/server/CMakeFiles/rebuild_cache.dir
+/root/galaxy/CHAT/build/src/server/CMakeFiles/edit_cache.dir
+/root/galaxy/CHAT/build/src/server/CMakeFiles/ChatServer.dir
