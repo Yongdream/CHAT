@@ -19,6 +19,8 @@ unordered_map
 -
 functional
 -
+mutex
+-
 usermodel.hpp
 ../include/server/usermodel.hpp
 json.hpp
@@ -123,6 +125,8 @@ string
 ../include/server/model/usermodel.hpp
 user.hpp
 ../include/server/model/user.hpp
+db.hpp
+../include/server/model/db.hpp
 
 ../include/server/public.hpp
 
@@ -146,6 +150,8 @@ chatservice.hpp
 public.hpp
 /root/galaxy/CHAT/src/server/public.hpp
 muduo/base/Logging.h
+-
+string
 -
 
 /root/galaxy/CHAT/src/server/db/db.cpp

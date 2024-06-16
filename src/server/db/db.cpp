@@ -53,7 +53,7 @@ bool MySQL::update(string sql)
     return true;
 }
  
-//查询操作
+// 查询操作
 MYSQL_RES *MySQL::query(string sql)
 {
     if (mysql_query(_conn, sql.c_str()))

@@ -4,12 +4,14 @@
 src/server/CMakeFiles/ChatServer.dir/chatserver.cpp.o
  ../include/server/chatserver.hpp
  ../include/server/chatservice.hpp
+ ../include/server/db/db.hpp
  ../include/server/json.hpp
  ../include/server/model/user.hpp
  ../include/server/model/usermodel.hpp
  /root/galaxy/CHAT/src/server/chatserver.cpp
 src/server/CMakeFiles/ChatServer.dir/chatservice.cpp.o
  ../include/server/chatservice.hpp
+ ../include/server/db/db.hpp
  ../include/server/json.hpp
  ../include/server/model/user.hpp
  ../include/server/model/usermodel.hpp

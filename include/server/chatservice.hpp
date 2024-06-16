@@ -2,8 +2,9 @@
 #define CHATSERVICE_H
  
 #include <muduo/net/TcpConnection.h>
-#include <unordered_map>//一个消息ID映射一个事件处理 
+#include <unordered_map>    // 一个消息ID映射一个事件处理 
 #include <functional>
+#include <mutex>
 
 using namespace std;
 using namespace muduo;
@@ -11,12 +12,13 @@ using namespace muduo::net;
  
 #include "usermodel.hpp"
 #include "json.hpp"
+
 using json = nlohmann::json;
  
-//表示处理消息的事件回调方法类型，事件处理器，派发3个东西 
+// 表示处理消息的事件回调方法类型，事件处理器，派发3个东西 
 using MsgHandler = std::function<void(const TcpConnectionPtr &conn, json &js, Timestamp)>;
  
-//聊天服务器业务类
+// 聊天服务器业务类
 class ChatService
 {
 public:
@@ -34,6 +36,12 @@ private:
  
     //存储消息id和其对应的业务处理方法，消息处理器的一个表，写消息id对应的处理操作 
     unordered_map<int, MsgHandler> _msgHandlerMap;
+
+    // 存储在线用户的通信连接
+    unordered_map<int, TcpConnectionPtr> _userConnMap;
+
+    // 定义互斥锁 保证_userConnMap的线程安全
+    mutex _connMutex;
 
     // 数据操作类对象
     UserModel _userModel;

@@ -55,7 +55,7 @@ void ChatServer::onMessage(const TcpConnectionPtr &conn,
     json js = json::parse(buf);
     //达到的目的：完全解耦网络模块的代码和业务模块的代码
     //通过js["msgid"] 获取=》业务handler处理器（在业务模块事先绑定好的）=》conn  js  time传给你 
-    auto msgHandler = ChatService::instance()->getHandler(js["msgid"].get<int>());//转成整型 
+    auto msgHandler = ChatService::instance()->getHandler(js["msgid"].get<int>());  // 转成整型 
     //回调消息绑定好的事件处理器，来执行相应的业务处理，一个ID一个操作 
     msgHandler(conn, js, time);
 }

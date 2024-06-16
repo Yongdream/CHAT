@@ -1,3 +1,5 @@
 bin/*
 build/*
 build
+build/CMakeFiles/*
+build/src/server/CMakeFiles/ChatServer.dir/chatserver.cpp.o

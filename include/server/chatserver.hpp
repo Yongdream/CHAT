@@ -10,6 +10,9 @@ using namespace muduo::net;
 //聊天服务器的主类
 class ChatServer
 {
+private:
+    TcpServer _server;  // 组合muduo库，实现服务器功能的类对象
+    EventLoop* _loop;   // 指向事件循环单元的指针
 public:
     // 初始化聊天服务器对象
     ChatServer(EventLoop *loop,
@@ -19,14 +22,12 @@ public:
     void start();
  
 private:
-    //上报链接相关信息的回调函数
+    // 上报链接相关信息回调
     void onConnection(const TcpConnectionPtr &);
-    //上报读写相关信息的回调函数
+    // 上报读写相关信息回调
     void onMessage(const TcpConnectionPtr &,
                    Buffer *,
-                   Timestamp);
-    TcpServer _server;      //组合muduo库，实现服务器功能的类对象
-    EventLoop *_loop;        //指向事件循环单元的指针
+                   Timestamp);       
 };
  
 #endif
