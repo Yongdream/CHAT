@@ -33,3 +33,49 @@ thirdparty/             # 存放第三方库
 |-- json/               # JSON 库的头文件
 |   |-- json.hpp
 ```
+
+## 编译方式
+
+使用脚本
+1.清除build和bin旧文件
+2.自动编译生成新文件
+```bash
+./mk.sh
+```
+
+## MySQL常用指令
+### 启动和停止MySQL服务
+```
+net start mysql // 启动mysql服务
+net stop mysql // 停止mysql服务
+```
+### MySQL的登陆和退出
+- MySQL登陆
+```
+mysql -u root -p
+123456
+```
+- MySQL登出
+```
+exit
+quit
+```
+### 查询数据库
+查询所有的数据库
+```
+SHOW DATABASES;
+```
+### 使用数据库
+使用数据库,SQL是区分大小写的！
+```
+USE DatabaseName;
+```
+### 查询表
+- 查询当前数据库下所有表名称
+```
+SHOW TABLES;
+```
+- 查询表结构
+```
+DESC TableName;
+```
