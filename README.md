@@ -1,3 +1,11 @@
+## 编译方式
+- 使用脚本
+    1.清除build和bin旧文件
+    2.自动编译生成新文件
+```bash
+./mk.sh
+```
+
 ## 文件布局
 
 ```
@@ -34,15 +42,6 @@ thirdparty/             # 存放第三方库
 |   |-- json.hpp
 ```
 
-## 编译方式
-
-使用脚本
-1.清除build和bin旧文件
-2.自动编译生成新文件
-```bash
-./mk.sh
-```
-
 ## MySQL常用指令
 ### 启动和停止MySQL服务
 ```
@@ -51,31 +50,31 @@ net stop mysql // 停止mysql服务
 ```
 ### MySQL的登陆和退出
 - MySQL登陆
-```
+```base
 mysql -u root -p
 123456
 ```
 - MySQL登出
-```
+```base
 exit
 quit
 ```
 ### 查询数据库
 查询所有的数据库
-```
+```base
 SHOW DATABASES;
 ```
 ### 使用数据库
-使用数据库,SQL是区分大小写的！
-```
+- 使用数据库,SQL是区分大小写的！
+```base
 USE DatabaseName;
 ```
 ### 查询表
 - 查询当前数据库下所有表名称
-```
+```base
 SHOW TABLES;
 ```
 - 查询表结构
-```
+```base
 DESC TableName;
 ```
