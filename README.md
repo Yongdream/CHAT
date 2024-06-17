@@ -36,7 +36,7 @@ telnet 127.0.0.1 6000
 1. 使用两个账户登录聊天服务器
 ```bash
 {"msgid":1,"id":1,"password":"123456"}
-{"msgid":1,"id":5,"password":"123456"}
+{"msgid":1,"id":2,"password":"123456"}
 ```
 ![两个账户登录](display/Snipaste_2024-06-17_15-59-19.png)
 
@@ -50,7 +50,7 @@ telnet 127.0.0.1 6000
 >
 >id=2用户向id=1用户进行私聊，发送消息为「Hello,Hello.」
 >
->id=1用户向id=5用户(offline user)进行私聊，发送消息为「Hello,honey!」
+>id=1用户向id=5用户(offline user)进行私聊，发送消息为「Hello,boy!」
 
 ![发送消息](display/Snipaste_2024-06-17_16-01-33.png)
 
