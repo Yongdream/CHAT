@@ -30,10 +30,10 @@ bool UserModel::insert(User &user)
 // 根据用户号码查询用户信息
 User UserModel::query(int id)
 {
-    // 1.组装sql语句
+    // 组装sql语句
     char sql[1024] = {0};
     sprintf(sql, "select * from user where id = %d", id); 
-    // 这里是将整个"select * from user where id = x“作为指令
+    // 这里是将整个"select * from user where id = x"作为指令
 
     MySQL mysql;
     if (mysql.connect())
@@ -60,7 +60,7 @@ User UserModel::query(int id)
 
 bool UserModel::updateState(User user)
 {
-    // 1.组装sql语句
+    // 组装sql语句
     char sql[1024] = {0};
     sprintf(sql, "update user set state = '%s' where id = %d", user.getState().c_str(), user.getId());
 
@@ -73,4 +73,15 @@ bool UserModel::updateState(User user)
         }
     }
     return false;
+}
+
+void UserModel::resetState()
+{
+    char sql[1024] = "update user set state = 'offline' where state = 'online'";
+
+    MySQL mysql;
+    if (mysql.connect())
+    {
+        mysql.update(sql);
+    }
 }

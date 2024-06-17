@@ -118,3 +118,31 @@ void ChatService::reg(const TcpConnectionPtr &conn, json &js, Timestamp time)
         conn->send(response.dump());    // Callback, returns a json string
     } 
 }
+
+void ChatService::clientCloseException(const TcpConnectionPtr &conn){
+    User user;
+    {
+        // 以conn从哈希表中倒查主键id
+        lock_guard<mutex> lock(_connMutex);
+        for (auto it = _userConnMap.begin(); it != _userConnMap.end(); it++)
+        {
+            if (it->second == conn)
+            {
+                user.setId(it->first);
+                _userConnMap.erase(it);
+                break;
+            }
+        }
+    }
+    // 更新用户的状态信息
+    if (user.getId() != -1)
+    {
+        user.setState("offline");
+        _userModel.updateState(user);
+    }
+}
+
+void ChatService::reset(){
+    // 把所有online状态的用户转为offline
+    _userModel.resetState();
+}
