@@ -6,24 +6,27 @@
 using namespace std;
 using namespace muduo;
  
-//获取单例对象的接口函数
+// 获取单例对象的接口函数
 ChatService *ChatService::instance()
 {
     static ChatService service;
     return &service;
 }
  
-//构造方法，注册消息以及对应的Handler回调操作
+// 构造方法，注册消息以及对应的Handler回调操作
 ChatService::ChatService()
 {
     //用户基本业务管理相关事件处理回调注册
     _msgHandlerMap.insert({LOGIN_MSG, std::bind(&ChatService::login, this, _1, _2, _3)});
     _msgHandlerMap.insert({REG_MSG, std::bind(&ChatService::reg, this, _1, _2, _3)});
 
+    _msgHandlerMap.insert({ONE_CHAT_MSG, std::bind(&ChatService::oneChat, this, _1, _2, _3)});
+
+
 }
  
  
-//获取消息对应的处理器
+// 消息对应的处理器
 MsgHandler ChatService::getHandler(int msgid)
 {
     //记录错误日志，msgid没有对应的事件处理回调
@@ -37,7 +40,7 @@ MsgHandler ChatService::getHandler(int msgid)
     }
     else//成功的话 
     {
-        return _msgHandlerMap[msgid];//返回这个处理器 
+        return _msgHandlerMap[msgid];   // 返回这个处理器 
     }
 }
  
@@ -78,6 +81,15 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
             response["errmsg"] = "登录成功！";
             response["id"] = user.getId();
             response["name"] = user.getName();
+
+            // 查询用户是否有离线消息
+            vector<string> vec = _offlineMsgModel.query(id);
+            if(!vec.empty())
+            {
+                response["offlinemsg"] = vec;   // 读取该用户的离线消息后
+                _offlineMsgModel.remove(id);    // 删除该用户所有离线消息
+            }
+            conn->send(response.dump());
         }
     }
     else
@@ -90,7 +102,7 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
     }
 }
  
-//处理注册业务  name  password
+// 注册业务  name  password
 void ChatService::reg(const TcpConnectionPtr &conn, json &js, Timestamp time)
 {
 	LOG_INFO<<"Handle registration business！";
@@ -119,6 +131,26 @@ void ChatService::reg(const TcpConnectionPtr &conn, json &js, Timestamp time)
     } 
 }
 
+// 点对点聊天消息
+void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp timr)
+{
+    int to_id = js["to"].get<int>();
+    {
+        lock_guard<mutex>lock(_connMutex);
+        auto it = _userConnMap.find(to_id);
+        if(it != _userConnMap.end())
+        {
+            // to_id在线 服务器推送消息
+            it->second->send(js.dump());
+            return ;
+        }
+    }
+
+    // to_id离线，处理离线消息
+    _offlineMsgModel.insert(to_id, js.dump());
+}
+
+// 客户端异常关闭
 void ChatService::clientCloseException(const TcpConnectionPtr &conn){
     User user;
     {
@@ -142,6 +174,7 @@ void ChatService::clientCloseException(const TcpConnectionPtr &conn){
     }
 }
 
+// 客户端用户状态重置
 void ChatService::reset(){
     // 把所有online状态的用户转为offline
     _userModel.resetState();

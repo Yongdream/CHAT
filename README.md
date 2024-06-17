@@ -10,23 +10,31 @@
 ## 注册登录业务
 - 成功编译在bin下生成新ChatServer执行文件
 - 客户端登录服务器
-```
+```bash
 ./ChatServer
 ```
 - 开启监听客户端连接
-```
+```bash
 telnet 127.0.0.1 6000
 ```
 - 使用zhang的账号来注册,客户端键入
-```
+```bash
  {"msgid":2,"name":"zhang","password":"123456"}
 ```
 ![客户端登录服务器](display/Snipaste_2024-06-17_10-56-42.png.png)
 ![开启监听客户端连接](display/Snipaste_2024-06-17_10-57-01.png)
 ![sql底层user查看](display/Snipaste_2024-06-17_10-55-32.png)
 - 使用zhang的账号来登录,客户端键入
-```
+```bash
+{"msgid":1,"id":1,"password":"123456"}
 {"msgid":1,"id":2,"password":"123456"}
+{"msgid":1,"id":5,"password":"123456"}
+```
+
+```bash
+{"msgid":5,"id":1,"name":"Jiao","to":2,"msg":"Hello,honey!"}
+{"msgid":5,"id":2,"name":"fqj","to":1,"msg":"Hello,Hello."}
+{"msgid":5,"id":1,"name":"Jiao","to":5,"msg":"Hello,boy!"}
 ```
 
 
