@@ -27,15 +27,32 @@ telnet 127.0.0.1 6000
 - 使用zhang的账号来登录,客户端键入
 ```bash
 {"msgid":1,"id":1,"password":"123456"}
-{"msgid":1,"id":2,"password":"123456"}
-{"msgid":1,"id":5,"password":"123456"}
 ```
 
+## 私聊业务
+1. 使用两个账户登录聊天服务器
+```bash
+{"msgid":1,"id":1,"password":"123456"}
+{"msgid":1,"id":5,"password":"123456"}
+```
+![两个账户登录](display/Snipaste_2024-06-17_15-59-19.png)
+2. 发送消息
 ```bash
 {"msgid":5,"id":1,"name":"Jiao","to":2,"msg":"Hello,honey!"}
 {"msgid":5,"id":2,"name":"fqj","to":1,"msg":"Hello,Hello."}
 {"msgid":5,"id":1,"name":"Jiao","to":5,"msg":"Hello,boy!"}
 ```
+    id=1用户向id=2用户进行私聊，发送消息为「Hello,honey!」
+    id=2用户向id=1用户进行私聊，发送消息为「Hello,Hello.」
+    id=1用户向id=5用户(offline user)进行私聊，发送消息为「Hello,honey!」
+![发送消息](display/Snipaste_2024-06-17_16-01-33.png)
+3. 离线消息存储入`offlinemessage`数据库
+![离线消息数据库](display/Snipaste_2024-06-17_16-02-24.png)
+4. id=5用户登录，id=1发来的离线消息被成功推送，底层数据库`offlinemessage`清空
+![成功推送](display/Snipaste_2024-06-17_16-04-10.png)
+![清空数据库](display/Snipaste_2024-06-17_16-05-51.png)
+
+    
 
 
 ## 文件布局
