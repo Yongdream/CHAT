@@ -47,8 +47,11 @@ telnet 127.0.0.1 6000
 {"msgid":5,"id":1,"name":"Jiao","to":5,"msg":"Hello,boy!"}
 ```
 >id=1用户向id=2用户进行私聊，发送消息为「Hello,honey!」
+>
 >id=2用户向id=1用户进行私聊，发送消息为「Hello,Hello.」
+>
 >id=1用户向id=5用户(offline user)进行私聊，发送消息为「Hello,honey!」
+
 ![发送消息](display/Snipaste_2024-06-17_16-01-33.png)
 
 3. 离线消息存储入`offlinemessage`数据库
