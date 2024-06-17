@@ -55,9 +55,11 @@ telnet 127.0.0.1 6000
 ![发送消息](display/Snipaste_2024-06-17_16-01-33.png)
 
 3. 离线消息存储入`offlinemessage`数据库
+
 ![离线消息数据库](display/Snipaste_2024-06-17_16-02-24.png)
 
 4. id=5用户登录，id=1发来的离线消息被成功推送，底层数据库`offlinemessage`清空
+
 ![成功推送](display/Snipaste_2024-06-17_16-04-10.png)
 ![清空数据库](display/Snipaste_2024-06-17_16-05-51.png)
 
