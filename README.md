@@ -21,7 +21,7 @@ telnet 127.0.0.1 6000
 ```
 - 使用`zhang`的账号来注册,客户端键入
 ```bash
- {"msgid":2,"name":"zhang","password":"123456"}
+ {"msgid":3,"name":"demo","password":"123456"}
 ```
 ![客户端登录服务器](display/Snipaste_2024-06-17_10-56-42.png)
 ![开启监听客户端连接](display/Snipaste_2024-06-17_10-57-01.png)
