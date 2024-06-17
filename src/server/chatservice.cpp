@@ -19,8 +19,8 @@ ChatService::ChatService()
     //用户基本业务管理相关事件处理回调注册
     _msgHandlerMap.insert({LOGIN_MSG, std::bind(&ChatService::login, this, _1, _2, _3)});
     _msgHandlerMap.insert({REG_MSG, std::bind(&ChatService::reg, this, _1, _2, _3)});
-
     _msgHandlerMap.insert({ONE_CHAT_MSG, std::bind(&ChatService::oneChat, this, _1, _2, _3)});
+    _msgHandlerMap.insert({ADD_FRIENG_MSG, std::bind(&ChatService::addFriend, this, _1, _2, _3)});
 
 
 }
@@ -89,6 +89,23 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
                 response["offlinemsg"] = vec;   // 读取该用户的离线消息后
                 _offlineMsgModel.remove(id);    // 删除该用户所有离线消息
             }
+            
+            // 查询该用户的好友信息并返回
+            vector<User> userVec = _friendModel.query(id);
+            if (!userVec.empty())
+            {
+                vector<string> vecf;
+                for (User &user : userVec)
+                {
+                    json js;
+                    js["id"] = user.getId();
+                    js["name"] = user.getName();
+                    js["state"] = user.getState();
+                    vecf.push_back(js.dump());
+                }
+                response["friends"] = vecf;
+            }
+
             conn->send(response.dump());
         }
     }
@@ -131,7 +148,7 @@ void ChatService::reg(const TcpConnectionPtr &conn, json &js, Timestamp time)
     } 
 }
 
-// 点对点聊天消息
+// Private chat
 void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp timr)
 {
     int to_id = js["to"].get<int>();
@@ -140,13 +157,13 @@ void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp timr
         auto it = _userConnMap.find(to_id);
         if(it != _userConnMap.end())
         {
-            // to_id在线 服务器推送消息
+            // 「to_id」online. Server push message
             it->second->send(js.dump());
             return ;
         }
     }
 
-    // to_id离线，处理离线消息
+    // 「to_id」is offline. Processing offline messages
     _offlineMsgModel.insert(to_id, js.dump());
 }
 
@@ -176,6 +193,35 @@ void ChatService::clientCloseException(const TcpConnectionPtr &conn){
 
 // 客户端用户状态重置
 void ChatService::reset(){
-    // 把所有online状态的用户转为offline
+    // 把所有online状态的用户设为「offline」
     _userModel.resetState();
+}
+
+// 添加好友
+void ChatService::addFriend(const TcpConnectionPtr &conn, json &js, Timestamp time)
+{
+    int userid = js["id"].get<int>();               //获取用户id
+    int friendid = js["friendid"].get<int>();       //获取好友id
+
+    bool state = _friendModel.insert(userid, friendid);
+    if(state)
+    {
+        // 添加好友成功
+        json response;
+        response["msgid"] = ADD_FRIENG_MSG_ACK;
+        response["error"] = 0;
+        response["errmsg"]="成功添加好友！";
+        response["id"] = userid;
+        response["friendid"] = friendid;
+        conn->send(response.dump());
+    }
+    else
+    {
+        // 添加好友失败
+        json response;
+        response["msgid"] = ADD_FRIENG_MSG_ACK;
+        response["error"] = 1;
+        response["errmsg"]="添加好友失败！";
+        conn->send(response.dump());
+    }
 }

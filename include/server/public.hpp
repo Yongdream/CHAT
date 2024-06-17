@@ -13,6 +13,9 @@ enum EnMsgType
     REG_MSG_ACK,    // 注册响应消息 服务器返回注册响应
 
     ONE_CHAT_MSG = 5,   // 聊天消息
+
+    ADD_FRIENG_MSG = 6, // 添加好友消息
+    ADD_FRIENG_MSG_ACK, // 添加好友响应消息
 };
  
 #endif
