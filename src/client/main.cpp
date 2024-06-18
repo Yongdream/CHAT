@@ -262,13 +262,13 @@ void readTaskHandler(int clientfd)
 
 // 客户端命令列表
 unordered_map<string, string> CommandMap{
-    {"help", "显示所有支持的命令 格式 help"},
-    {"chat", "一对一聊天 格式 chat:friendid:message"},
-    {"addfriend", "添加好友 格式 addfriend:friendid"},
-    {"creategroup", "创建群组 格式 creategroup:groupname:groupdesc"},
-    {"addgroup", "加入群组 格式 addgroup:groupid"},
-    {"groupchat", "群聊 格式 groupchat:groupid:message"},
-    {"loginout", "注销 格式 loginout"},
+    {"help", "Help                  Format: help"},
+    {"chat", "PrivateChat           Format chat:<friendid>:<message>"},
+    {"addfriend", "AddFriend        Format addfriend:<friendid>"},
+    {"creategroup", "CreateGroup    Format creategroup:<groupname>:<groupdesc>"},
+    {"addgroup", "JoinGroup         Format addgroup:<groupid>"},
+    {"groupchat", "GroupChat        Format groupchat:<groupid>:<message>"},
+    {"loginout", "Logout            Format loginout"},
 };
  
 // help command Handler
