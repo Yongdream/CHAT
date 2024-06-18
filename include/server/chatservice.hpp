@@ -44,9 +44,13 @@ public:
 
     // 添加好友
     void addFriend(const TcpConnectionPtr &conn, json &js, Timestamp time);
+
+    // 注销业务
+    void loginout(const TcpConnectionPtr &conn, json &js, Timestamp time);
     
     // 处理客户端异常退出
     void clientCloseException(const TcpConnectionPtr &conn);
+
     // 客户端用户状态重置
     void reset();
 

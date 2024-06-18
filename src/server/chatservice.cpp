@@ -20,10 +20,11 @@ ChatService::ChatService()
     _msgHandlerMap.insert({LOGIN_MSG, std::bind(&ChatService::login, this, _1, _2, _3)});
     _msgHandlerMap.insert({REG_MSG, std::bind(&ChatService::reg, this, _1, _2, _3)});
     _msgHandlerMap.insert({ONE_CHAT_MSG, std::bind(&ChatService::oneChat, this, _1, _2, _3)});
-    _msgHandlerMap.insert({ADD_FRIENG_MSG, std::bind(&ChatService::addFriend, this, _1, _2, _3)});
+    _msgHandlerMap.insert({ADD_FRIEND_MSG, std::bind(&ChatService::addFriend, this, _1, _2, _3)});
     _msgHandlerMap.insert({CREATE_GROUP_MSG, std::bind(&ChatService::createGroup, this, _1, _2, _3)});
     _msgHandlerMap.insert({ADD_GROUP_MSG, std::bind(&ChatService::addGroup, this, _1, _2, _3)});
     _msgHandlerMap.insert({GROUP_CHAT_MSG, std::bind(&ChatService::groupChat, this, _1, _2, _3)});
+    _msgHandlerMap.insert({LOGINOUT_MSG, std::bind(&ChatService::loginout, this, _1, _2, _3)});
 }
  
  
@@ -234,7 +235,7 @@ void ChatService::addFriend(const TcpConnectionPtr &conn, json &js, Timestamp ti
     {
         // 添加好友成功
         json response;
-        response["msgid"] = ADD_FRIENG_MSG_ACK;
+        response["msgid"] = ADD_FRIEND_MSG_ACK;
         response["error"] = 0;
         response["errmsg"]="成功添加好友！";
         response["id"] = userid;
@@ -245,7 +246,7 @@ void ChatService::addFriend(const TcpConnectionPtr &conn, json &js, Timestamp ti
     {
         // 添加好友失败
         json response;
-        response["msgid"] = ADD_FRIENG_MSG_ACK;
+        response["msgid"] = ADD_FRIEND_MSG_ACK;
         response["error"] = 1;
         response["errmsg"]="添加好友失败！";
         conn->send(response.dump());
@@ -341,3 +342,22 @@ void ChatService::groupChat(const TcpConnectionPtr &conn, json &js, Timestamp ti
         }
     }
 }
+
+void ChatService::loginout(const TcpConnectionPtr &conn, json &js, Timestamp time)
+{
+    int userid = js["id"].get<int>();
+    {
+        lock_guard<mutex> lock(_connMutex);
+        auto it = _userConnMap.find(userid);
+        if (it != _userConnMap.end())
+        {
+            _userConnMap.erase(it);
+        }
+    }
+ 
+    // 更新用户状态信息
+    User user(userid, "", "", "offline");
+    _userModel.updateState(user);
+}
+
+

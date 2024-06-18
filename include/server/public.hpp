@@ -14,8 +14,8 @@ enum EnMsgType
 
     ONE_CHAT_MSG,   // 5:私聊消息
 
-    ADD_FRIENG_MSG,     // 6:添加好友消息
-    ADD_FRIENG_MSG_ACK, // 7:添加好友响应消息
+    ADD_FRIEND_MSG,     // 6:添加好友消息
+    ADD_FRIEND_MSG_ACK, // 7:添加好友响应消息
 
     CREATE_GROUP_MSG,       // 8:创建群组
     CREATE_GROUP_MSG_ACK,   // 9:创建群组响应消息
