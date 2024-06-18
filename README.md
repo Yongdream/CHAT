@@ -64,7 +64,7 @@ telnet 127.0.0.1 6000
 ![清空数据库](display/Snipaste_2024-06-17_16-05-51.png)
 
 
-## 好友业务
+## 好友业务 
 1. `id=1`添加`id=2`为好友
 ```bash
 {"msgid":6,"id":1,"name":"Jiao","friendid":2}
