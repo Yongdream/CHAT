@@ -7,7 +7,7 @@
 using namespace muduo;
 using namespace muduo::net;
  
-//聊天服务器的主类
+// 聊天服务器的主类
 class ChatServer
 {
 private:
