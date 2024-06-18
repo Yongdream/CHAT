@@ -20,7 +20,7 @@ MySQL::~MySQL()
         mysql_close(_conn);
 }
  
-//连接数据库
+// 连接数据库
 bool MySQL::connect()
 {
     MYSQL *p = mysql_real_connect(_conn, server.c_str(), user.c_str(),
