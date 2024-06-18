@@ -314,7 +314,7 @@ void mainMenu(int clientfd)
         }
         else
         {
-            command = commandbuf.substr(0, idx); // 截取命令类型
+            command = commandbuf.substr(0, idx);    // 截取命令类型
         }
         auto it = CommandHandlerMap.find(command);
         if (it == CommandHandlerMap.end())
