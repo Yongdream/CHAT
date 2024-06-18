@@ -378,12 +378,12 @@ void chat(int clientfd, string str)
         return;
     }
 
-    // 调试信息
-    cout << "Debug: friendid=" << friendid << endl;
-    cout << "Debug: message=" << message << endl;
-    cout << "Debug: g_currentUser id=" << g_currentUser.getId() << endl;
-    cout << "Debug: g_currentUser name=" << g_currentUser.getName() << endl;
-    cout << "Debug: current time=" << getCurrentTime() << endl;
+    // // 调试信息
+    // cout << "Debug: friendid=" << friendid << endl;
+    // cout << "Debug: message=" << message << endl;
+    // cout << "Debug: g_currentUser id=" << g_currentUser.getId() << endl;
+    // cout << "Debug: g_currentUser name=" << g_currentUser.getName() << endl;
+    // cout << "Debug: current time=" << getCurrentTime() << endl;
  
     json js;
     try {
