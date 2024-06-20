@@ -15,6 +15,7 @@ using namespace muduo::net;
 #include "friendmodel.hpp"
 #include "groupmodel.hpp"
 #include "json.hpp"
+#include "redis.hpp"
 
 using json = nlohmann::json;
  
@@ -56,23 +57,28 @@ public:
 
     // 获取消息对应的处理器
     MsgHandler getHandler(int msgid);
+
+    void handleRedisSubscribeMessage(int userid, string msg);
 private:
     ChatService();//单例 
  
     //存储消息id和其对应的业务处理方法，消息处理器的一个表，写消息id对应的处理操作 
-    unordered_map<int, MsgHandler> _msgHandlerMap;
+    unordered_map<int, MsgHandler> msgHandlerMap_;
 
     // 存储在线用户的通信连接
-    unordered_map<int, TcpConnectionPtr> _userConnMap;
+    unordered_map<int, TcpConnectionPtr> userConnMap_;
 
-    // 定义互斥锁 保证_userConnMap的线程安全
-    mutex _connMutex;
+    // 定义互斥锁 保证userConnMap_的线程安全
+    mutex connMutex_;
 
     // 数据操作类对象
-    UserModel _userModel;
-    OfflineMsgModel _offlineMsgModel;
-    FriendModel _friendModel;
-    GroupModel _groupModel;
+    UserModel userModel_;
+    OfflineMsgModel offlineMsgModel_;
+    FriendModel friendModel_;
+    GroupModel groupModel_;
+
+    // redis操作对象
+    Redis redis_;
 };
  
 #endif
