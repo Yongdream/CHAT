@@ -481,15 +481,32 @@ void groupchat(int clientfd, string str)
 // main线程用作发送线程，子线程用作接收线程
 int main(int argc, char **argv)
 {
-    if (argc < 3)
-    {
-        cerr << "command invalid! example: ./ChatClient 192.168.122.129 6000" << endl; // cerr:程序错误信息
-        exit(-1);
-    }
+    const char *defaultIp = "192.168.122.129";
+    uint16_t defaultPort = 8000;    // Nginx监听的是8000端口
+
+    char *ip;
+    uint16_t port;
 
     // 解析传递的ip+port
-    char *ip = argv[1];
-    uint16_t port = atoi(argv[2]);
+    if (argc < 2)
+    {
+        ip = (char *)defaultIp;
+        port = defaultPort;
+    }
+    else
+    {
+        ip = argv[1];
+        port = (argc > 2) ? atoi(argv[2]) : defaultPort;
+        if (port != 6000 || port != 6002)
+        {
+            cerr << "Invalid port specified, using default port 8000." << endl;
+            port = defaultPort;
+        }
+    }
+
+    // // 解析传递的ip+port
+    // char *ip = argv[1];
+    // uint16_t port = atoi(argv[2]);
 
     // 创建client端socket
     int clientfd = socket(AF_INET, SOCK_STREAM, 0); // AF_INET:IPv4
