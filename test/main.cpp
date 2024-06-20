@@ -55,7 +55,7 @@ int main(int argc, char **argv) // argc 参数个数    argv 参数序列或指�
 {
     if (argc < 3)
     {
-        cerr << "command invalid! example: ./ChatClient 127.0.0.1 6000" << endl; // cerr:程序错误信息
+        cerr << "command invalid! example: ./ChatClient 192.168.122.129 6000" << endl; // cerr:程序错误信息
         exit(-1);
     }
  
