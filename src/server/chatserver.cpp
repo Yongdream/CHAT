@@ -13,22 +13,22 @@ using json = nlohmann::json;
 ChatServer::ChatServer(EventLoop *loop,
                        const InetAddress &listenAddr,
                        const string &nameArg)
-    : _server(loop, listenAddr, nameArg), _loop(loop)
+    : server_(loop, listenAddr, nameArg), loop_(loop)
 {
     //注册链接回调
-    _server.setConnectionCallback(std::bind(&ChatServer::onConnection, this, _1));//绑定器bind
+    server_.setConnectionCallback(std::bind(&ChatServer::onConnection, this, _1));//绑定器bind
  
     //注册消息回调
-    _server.setMessageCallback(std::bind(&ChatServer::onMessage, this, _1, _2, _3));//绑定器bind 
+    server_.setMessageCallback(std::bind(&ChatServer::onMessage, this, _1, _2, _3));//绑定器bind 
  
     //设置线程数量4
-    _server.setThreadNum(4);
+    server_.setThreadNum(4);
 }
  
 //启动服务
 void ChatServer::start()
 {
-    _server.start();
+    server_.start();
 }
  
 //上报链接相关信息的回调函数

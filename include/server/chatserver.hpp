@@ -11,8 +11,8 @@ using namespace muduo::net;
 class ChatServer
 {
 private:
-    TcpServer _server;  // 组合muduo库，实现服务器功能的类对象
-    EventLoop* _loop;   // 指向事件循环单元的指针
+    TcpServer server_;  // 组合muduo库，实现服务器功能的类对象
+    EventLoop* loop_;   // 指向事件循环单元的指针
 public:
     // 初始化聊天服务器对象
     ChatServer(EventLoop *loop,
