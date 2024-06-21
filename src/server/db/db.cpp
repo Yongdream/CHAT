@@ -23,7 +23,10 @@ MySQL::~MySQL()
 // 连接数据库
 bool MySQL::connect()
 {
-    MYSQL *p = mysql_realconn_ect(conn_, server.c_str(), user.c_str(),
+    // mysql_options(conn_, MYSQL_OPT_RECONNECT, 0);
+
+    LOG_INFO << "Attempting to connect to MySQL server...";
+    MYSQL *p = mysql_real_connect(conn_, server.c_str(), user.c_str(),
                                   password.c_str(), dbname.c_str(), 3306, nullptr, 0);
     if (p != nullptr)
     {

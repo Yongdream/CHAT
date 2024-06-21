@@ -2,6 +2,7 @@
 #include "public.hpp"
 #include <muduo/base/Logging.h> // muduo的日志 
 #include <string>
+#include <iostream>
 
 using namespace std;
 using namespace muduo;
@@ -78,12 +79,14 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
                 lock_guard<mutex> lock(connMutex_);
                 userConnMap_.insert(make_pair(id, conn));
             }
-
+            
+            // id用户登录成功后，向redis订阅channel(id)
             redis_.subscribe(id);
-
+            
             // Login succeeded. Update the user status
             user.setState("online");
             userModel_.updateState(user);
+            
             json response;
             response["msgid"] = LOGIN_MSG_ACK;
             response["errno"] = 0;
@@ -389,6 +392,7 @@ void ChatService::loginout(const TcpConnectionPtr &conn, json &js, Timestamp tim
 // 从redis消息队列中获取订阅的消息
 void ChatService::handleRedisSubscribeMessage(int userid, string msg)
 {
+    // 用户在线
     lock_guard<mutex> lock(connMutex_);
     auto it = userConnMap_.find(userid);
     if (it != userConnMap_.end())

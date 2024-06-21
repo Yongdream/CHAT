@@ -1,5 +1,6 @@
 #include "redis.hpp"
 #include <iostream>
+#include <muduo/base/Logging.h>
 
 using namespace std;
 
@@ -26,17 +27,32 @@ bool Redis::connect()
 {
     // 负责发布消息的上下文连接
     publishContext_ = redisConnect("192.168.122.129", 6379);
-    if (nullptr == publishContext_)
+    
+    if (nullptr == publishContext_ || publishContext_->err)
     {
-        cerr << "Connect redis failed!" << endl;
-        return false;
+        if (publishContext_)
+        {
+            cerr << "Connect redis failed: " << publishContext_->errstr << endl;
+        } 
+        else
+        {
+            cerr << "Connect redis failed: can't allocate redis context" << endl;
+        }
+    return false;
     }
 
     // 负责订阅消息的上下文连接
     subcribeContext_ = redisConnect("192.168.122.129", 6379);
-    if (nullptr == subcribeContext_)
+    if (subcribeContext_ == nullptr || subcribeContext_->err)
     {
-        cerr << "Connect redis failed!" << endl;
+        if (subcribeContext_)
+        {
+            cerr << "Connect redis failed: " << subcribeContext_->errstr << endl;
+        }
+        else
+        {
+            cerr << "Connect redis failed: can't allocate redis context" << endl;
+        }
         return false;
     }
 
@@ -52,7 +68,7 @@ bool Redis::connect()
     });
     t.detach(); // 分离线程
 
-    cout << "connect redis-server success!" << endl;
+    LOG_INFO << "connect redis-server success!";
 
     return true;
 }
@@ -144,13 +160,18 @@ void Redis::observer_channel_message()
     */
     while (REDIS_OK == redisGetReply(this->subcribeContext_, (void **)&reply))
     {
-        if (reply != nullptr && reply->element[2] != nullptr && reply->element[2]->str != nullptr)
+        if (reply != nullptr)
         {
-            // 给业务层上报通道发生的消息
-            notifyMessageHandler_(atoi(reply->element[1]->str), reply->element[2]->str);
+            if (reply->type == REDIS_REPLY_ARRAY && reply->elements >= 3)
+            {
+                if (reply->element[2] != nullptr && reply->element[2]->str != nullptr)
+                {
+                    // 给业务层上报通道发生的消息
+                    notifyMessageHandler_(atoi(reply->element[1]->str), reply->element[2]->str);
+                }
+            }
+            freeReplyObject(reply);
         }
-
-        freeReplyObject(reply);
     }
     cerr << ">>>>>>>>>>>>> observer_channel_message quit <<<<<<<<<<<<<" << endl;
 }

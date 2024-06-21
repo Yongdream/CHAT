@@ -16,7 +16,6 @@ int main(int argc, char **argv)
     uint16_t defaultPort = 6000;
     uint16_t fallbackPort = 6002;
 
-    const char *ip = "192.168.122.129";
     uint16_t port;
 
     if (argc < 2)
@@ -38,8 +37,8 @@ int main(int argc, char **argv)
     signal(SIGINT,resetHandler);
 
     EventLoop loop;
-    InetAddress addr(ip, port);
-    ChatServer server(&loop,addr,"ChatServer");
+    InetAddress addr("192.168.122.129", port);
+    ChatServer server(&loop, addr, "ChatServer");
  
     server.start();
     loop.loop();
