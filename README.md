@@ -63,9 +63,9 @@ telnet 127.0.0.1 6000
 ![成功推送](display/Snipaste_2024-06-17_16-04-10.png)
 ![清空数据库](display/Snipaste_2024-06-17_16-05-51.png)
 
+## 好友业务 "msgid":6
 
-## 好友业务 
-1. `id=1`添加`id=2`为好友
+1. `id=1` 添加 `id=2` 为好友
 ```bash
 {"msgid":6,"id":1,"name":"Jiao","friendid":2}
 ```
@@ -77,11 +77,45 @@ telnet 127.0.0.1 6000
 
 ![friend数据库](display/Snipaste_2024-06-17_19-54-39.png)
 
+## 群组业务 "msgid":8、10、12
+
+1. **创建群组**
+
+   有 `id = 1` 用户创建 `Mass Fortune` 群组名，描述 `It is just a test`
+
+   ```bash
+   {"msgid":8,"id":1,"groupname":"Mass Fortune","groupdesc":"It is just a test"}
+   ```
+
+   ![image-20240914144827462](./typora_photo/README/image-20240914144827462.png)
+
+2. **加入群组**
+
+   ```bash
+   {"msgid":10,"id":2,"groupid":2}
+   {"msgid":10,"id":3,"groupid":2}
+   {"msgid":10,"id":4,"groupid":2}
+   ```
+
+3. **群组聊天**
+
+   看一下现在的用户在线情况和群组情况 群组2中 cc dd用户均处于离线状态 aa，bb在线
+
+   ![image-20240914151601575](./typora_photo/README/image-20240914151601575.png)
+
+   ```bash
+   {"msgid":12,"id":1,"groupid":2,"groupmsg":"Hello,Everyone."}
+   {"msgid":12,"id":2,"groupid":2,"groupmsg":"Hello,Everyone.I am bb"}
+   ```
+
+   aa、bb用户互相收到了消息，cc dd不在线,待接受信息保存在了 **`offlinemessage`** 离线表
+
+   ![image-20240914151434248](./typora_photo/README/image-20240914151434248.png)
 
 ## 文件布局
 
-```
-bin/
+```yaml
+	bin/
 |-- ChatServer          # 可执行文件 ChatServer
 |-- ChatClient          # 可执行文件 ChatClient
 
@@ -109,12 +143,21 @@ include/                # 存放项目的头文件，布局与 src 类似
 
 text/                   # 存放测试用的代码文件
 
+MySQL/					# 存放数据库样例文件
+
 thirdparty/             # 存放第三方库
 |-- json/               # JSON 库的头文件
 |   |-- json.hpp
 ```
 
+```bash
+$ nano /etc/nginx/nginx.conf
+```
+
+
+
 ## MySQL常用指令
+
 ### 启动和停止MySQL服务
 ```
 net start mysql // 启动mysql服务
